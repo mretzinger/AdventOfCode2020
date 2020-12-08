@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Days
 {
@@ -14,7 +15,7 @@ namespace AdventOfCode.Days
         {
             List<PassportInfo> passportInfos = Parse();
             Console.WriteLine("Day 4 Problem 1 Answer: " + Day4Prob1(passportInfos));
-            //Console.WriteLine("Day 4 Problem 2 Answer: " + Day4Prob2(passportInfos));
+            Console.WriteLine("Day 4 Problem 2 Answer: " + Day4Prob2(passportInfos));
         }
 
         public List<PassportInfo> Parse()
@@ -61,13 +62,12 @@ namespace AdventOfCode.Days
 
         static private int Day4Prob2(List<PassportInfo> passportInfos)
         {
+            //Day 4 Answer 2 = 101
             int finalSum = 0;
 
-
-            //Day 4 Answer 2 = 509
             foreach (var item in passportInfos)
             {
-                if(PassportValidator.Validate(item))
+                if(PassportValidator.ValidateAll(item))
                 {
                     finalSum++;
                 }
@@ -92,7 +92,18 @@ namespace AdventOfCode.Days
                 !String.IsNullOrEmpty(info.PassportID);
         }
 
-        public static bool ValidateBY(PassportInfo info)
+        public static bool ValidateAll(PassportInfo info)
+        {
+            return ValidateBirthYear(info) &&
+                ValidateIssueYear(info) &&
+                ValidateExpirationYear(info) &&
+                ValidateHeight(info) &&
+                ValidateHairColor(info) &&
+                ValidateEyeColor(info) &&
+                ValidatePassportID(info);
+        }
+
+        public static bool ValidateBirthYear(PassportInfo info)
         {
             return !String.IsNullOrEmpty(info.BirthYear) &&
                 info.BirthYear.Length == 4 &&
@@ -100,7 +111,7 @@ namespace AdventOfCode.Days
                 int.Parse(info.BirthYear) <= 2002;
         }
 
-        public static bool ValidateIY(PassportInfo info)
+        public static bool ValidateIssueYear(PassportInfo info)
         {
 
             return !String.IsNullOrEmpty(info.IssueYear) &&
@@ -109,13 +120,48 @@ namespace AdventOfCode.Days
                 int.Parse(info.IssueYear) <= 2020;
         }
 
-        public static bool ValidateEY(PassportInfo info)
+        public static bool ValidateExpirationYear(PassportInfo info)
         {
 
             return !String.IsNullOrEmpty(info.ExpirationYear) &&
                 info.IssueYear.Length == 4 &&
-                int.Parse(info.IssueYear) >= 2020 &&
-                int.Parse(info.IssueYear) <= 2030;
+                int.Parse(info.ExpirationYear) >= 2020 &&
+                int.Parse(info.ExpirationYear) <= 2030;
+        }
+
+        public static bool ValidateHeight(PassportInfo info)
+        {
+
+            return !String.IsNullOrEmpty(info.Height) &&
+                (info.Height.Contains("cm") ?
+                (int.Parse(info.Height.Split('c')[0]) >= 150 && int.Parse(info.Height.Split('c')[0]) <= 193) :
+                info.Height.Contains("in") ?
+                (int.Parse(info.Height.Split('i')[0]) >= 59 && int.Parse(info.Height.Split('i')[0]) <= 76) :
+                false);
+        }
+
+        public static bool ValidateHairColor(PassportInfo info)
+        {
+            Regex rx = new Regex("^#(?:[0-9a-fA-F]{6})$");
+            return !String.IsNullOrEmpty(info.HairColor) && rx.IsMatch(info.HairColor);
+
+        }
+
+        public static bool ValidateEyeColor(PassportInfo info)
+        {
+            if(!String.IsNullOrEmpty(info.EyeColor))
+            {
+                return info.EyeColor == "amb" || info.EyeColor == "blu" || info.EyeColor == "brn" ||
+                info.EyeColor == "gry" || info.EyeColor == "grn" || info.EyeColor == "hzl" || info.EyeColor == "oth";
+            }
+            return false;
+        }
+
+        public static bool ValidatePassportID(PassportInfo info)
+        {
+
+            return !String.IsNullOrEmpty(info.PassportID) &&
+                info.PassportID.Length == 9;
         }
     }
 
