@@ -20,7 +20,7 @@ namespace AdventOfCode.Days
         {
             string line;
             List<PasswordInfo> passwordInfos = new List<PasswordInfo>();
-            StreamReader file = new StreamReader("C:\\Users\\Margaret Landefeld\\MyProjects\\AdventOfCode\\Days\\Two\\Data.txt");
+            StreamReader file = new StreamReader("C:\\Users\\Margaret Landefeld\\MyProjects\\AdventOfCode\\Days\\2\\Data.txt");
 
             while ((line = file.ReadLine()) != null)
             {

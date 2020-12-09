@@ -50,7 +50,7 @@ namespace AdventOfCode.Days
             //Day 3 answer 1 = 209
             int finalSum = 0;
             string line;
-            StreamReader file = new StreamReader("C:\\Users\\Margaret Landefeld\\MyProjects\\AdventOfCode\\Days\\Three\\Data.txt");
+            StreamReader file = new StreamReader("C:\\Users\\Margaret Landefeld\\MyProjects\\AdventOfCode\\Days\\3\\Data.txt");
             int charIndex = 0;
             int startRead = 0;
 

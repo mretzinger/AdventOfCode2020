@@ -22,7 +22,7 @@ namespace AdventOfCode.Days
         {
             string line;
             List<PassportInfo> passportInfos = new List<PassportInfo>();
-            StreamReader file = new StreamReader("C:\\Users\\Margaret Landefeld\\MyProjects\\AdventOfCode\\Days\\Four\\Data.txt");
+            StreamReader file = new StreamReader("C:\\Users\\Margaret Landefeld\\MyProjects\\AdventOfCode\\Days\\4\\Data.txt");
             IDictionary<string, string> passDictionary = new Dictionary<string, string>();
 
             while ((line = file.ReadLine()) != null)
@@ -75,7 +75,6 @@ namespace AdventOfCode.Days
 
             return finalSum;
         }
-
     }
 
     public class PassportValidator
