@@ -10,7 +10,7 @@ namespace AdventOfCode.Days
         public void Run()
         {
             Console.WriteLine("Day 5 Problem 1 Answer: " + Day5Prob1());
-            //Console.WriteLine("Day 5 Problem 2 Answer: " + Day5Prob2());
+            Console.WriteLine("Day 5 Problem 2 Answer: " + Day5Prob2());
         }
 
         public int GetRowNumber(string row)
@@ -96,13 +96,35 @@ namespace AdventOfCode.Days
             return highestID;
         }
 
-        static private int Day5Prob2()
+        private int Day5Prob2()
         {
-            //Day 5 Answer 2 = 
-            int finalSum = 0;
+            //Day 5 Answer 2 = 727
+            string line;
+            StreamReader file = new StreamReader("C:\\Users\\Margaret Landefeld\\MyProjects\\AdventOfCode\\Days\\5\\Data.txt");
 
+            List<int> seatIds = new List<int>();
 
-            return finalSum;
+            while ((line = file.ReadLine()) != null)
+            {
+                int row = GetRowNumber(line);
+                int column = GetColumnNumber(line);
+                int seatID = (row * 8) + column;
+                seatIds.Add(seatID);
+            }
+
+            List<int> orderedSeats = seatIds.OrderBy(x => x).ToList();
+            List<int> missingSeats = new List<int>();
+
+            for (int i = 0; i < orderedSeats.Count; i++)
+            {
+                int element = orderedSeats[i];
+                if (i + 1 < orderedSeats.Count && !orderedSeats.Contains(++element))
+                {
+                    missingSeats.Add(element);
+                }
+            }
+
+            return missingSeats.First();
         }
     }
 }
