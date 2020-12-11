@@ -11,18 +11,18 @@ namespace AdventOfCode.Days
     {
         public void Run()
         {
-            List<DeclarationResponses> data = Parse();
-            Console.WriteLine("Day 6 Problem 1 Answer: " + Day6Prob1(data));
-            //Console.WriteLine("Day 6 Problem 2 Answer: " + Day6Prob2(data));
+            //List<DeclarationResponses> data = Parse();
+            List<Group> data = Parse();
+            //Console.WriteLine("Day 6 Problem 1 Answer: " + Day6Prob1(data));
+            Console.WriteLine("Day 6 Problem 2 Answer: " + Day6Prob2(data));
         }
 
 
-        public List<DeclarationResponses> Parse()
+        public List<Group> Parse()
         {
             string line;
             List<DeclarationResponses> responses = new List<DeclarationResponses>();
             StreamReader file = new StreamReader("C:\\Users\\Margaret Landefeld\\MyProjects\\AdventOfCode\\Days\\6\\Data.txt");
-            List<char> answers = new List<char>();
             List<Group> Groups = new List<Group>();
             Group group = new Group(responses);
 
@@ -31,31 +31,31 @@ namespace AdventOfCode.Days
                 line = line.Trim();
                 if (line == "")
                 {
-
-                    responses.Add(new DeclarationResponses(answers));
-                    answers = new List<char>();
-                    //group = new Group(responses);
-                    //Groups.Add(group);
-
-                    //Groups = new List<Group>();
+                    group = new Group(responses);
+                    Groups.Add(group);
+                    //answers = new List<char>();
+                    responses = new List<DeclarationResponses>();
                     continue;
                 }
 
-                foreach(char letter in line)
+                List<char> answers = new List<char>();
+
+                foreach (char letter in line)
                 {
                     //Problem 1
-                    if (!answers.Contains(letter))
-                    {
-                        answers.Add(letter);
-                    }
+                    //if (!answers.Contains(letter))
+                    //{
+                    //    answers.Add(letter);
+                    //}
 
                     //Problem 2
-                    //answers.Add(letter);
+                    answers.Add(letter);
                 }
+                responses.Add(new DeclarationResponses(answers));
             }
 
-            responses.Add(new DeclarationResponses(answers));
-            return responses;
+            Groups.Add(new Group(responses));
+            return Groups;
         }
 
         private int Day6Prob1(List<DeclarationResponses> data)
@@ -71,19 +71,34 @@ namespace AdventOfCode.Days
             return finalSum;
         }
 
-        private int Day6Prob2(List<DeclarationResponses> data)
+        private int Day6Prob2(List<Group> data)
         {
-            //Day 6 Answer 2 = 
+            //Day 6 Answer 2 = 3052
 
             int finalSum = 0;
 
-            foreach (var item in data)
+            foreach (Group group in data)
             {
-                int countAll = 0;
+                Dictionary<string, int> answers = new Dictionary<string, int>();
 
-                foreach(var row in item.Answer)
+                foreach (var row in group.Responses)
                 {
+                    foreach(char letter in row.Answer)
+                    {
+                        if(!answers.ContainsKey(letter.ToString()))
+                        {
+                            answers.Add(letter.ToString(), 1);
+                        }
+                        else
+                        {
+                            answers[letter.ToString()] += 1;
+                        }
+                    }
+                }
 
+                foreach(var answer in answers)
+                {
+                    finalSum = answer.Value == group.Responses.Count() ? finalSum + 1 : finalSum;
                 }
             }
 
