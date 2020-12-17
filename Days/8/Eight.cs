@@ -11,13 +11,12 @@ namespace AdventOfCode.Days
     {
         public void Run()
         {
-            List<Instruction> data = Parse();
-            //Console.WriteLine(data);
+            Instruction[] data = Parse();
             Console.WriteLine("Day 8 Problem 1 Answer: " + Day8Prob1(data));
             //Console.WriteLine("Day 8 Problem 2 Answer: " + Day8Prob2(data));
         }
 
-        public List<Instruction> Parse()
+        public Instruction[] Parse()
         {
             string line;
             StreamReader file = new StreamReader("C:\\Users\\Margaret Landefeld\\MyProjects\\AdventOfCode\\Days\\8\\Data.txt");
@@ -33,57 +32,51 @@ namespace AdventOfCode.Days
                 rowCount++;
             }
 
-            return Instructions;
+            Instruction[] instructionArray = Instructions.ToArray();
+
+            return instructionArray;
         }
 
-        public int Day8Prob1(List<Instruction> data)
+        public int Day8Prob1(Instruction[] data)
         {
             int acc = 0;
-            int currentRow = 1;
-            int nextRowCount = 0;
-            List<int> usedInstructions = new List<int>();
+            int row = 0;
 
-            while(!usedInstructions.Contains(currentRow))
+            while (true)
             {
-                foreach (var item in data)
+                if(data[row].Used == true)
                 {
-                    if (item.Line.Split(' ')[0] == "nop")
+                    break;
+                }
+                data[row].Used = true;
+                if (data[row].Line.Split(' ')[0] == "nop")
+                {
+                    row++;
+                }
+                else if (data[row].Line.Split(' ')[0] == "jmp")
+                {
+                    if (data[row].Line.Split(' ')[1].Contains("+"))
                     {
-                        nextRowCount++;
-                        continue;
+                        row += int.Parse(data[row].Line.Split('+')[1]);
                     }
-                    else if (item.Line.Split(' ')[0] == "jmp")
+                    else if (data[row].Line.Split(' ')[1].Contains("-"))
                     {
-                        if (item.Line.Split(' ')[1].Contains("+"))
-                        {
-                            nextRowCount += int.Parse(item.Line.Split('+')[1]);
-                        }
-                        else if (item.Line.Split(' ')[1].Contains("-"))
-                        {
-                            nextRowCount += int.Parse(item.Line.Split(' ')[1]);
-                        }
-
-                        break;
+                        row += int.Parse(data[row].Line.Split(' ')[1]);
                     }
-                    else if (item.Line.Split(' ')[0] == "acc")
-                    {
-                        nextRowCount++;
-                        acc += item.Line.Split(' ')[1].Contains("+") ? int.Parse(item.Line.Split('+')[1]) : int.Parse(item.Line.Split(' ')[1]);
-                    }
-
-                    usedInstructions.Add(item.RowId);
-                    currentRow = item.RowId;
-                    if(item == data.Last())
-                    {
-                        break;
-                    }
+                }
+                else if (data[row].Line.Split(' ')[0] == "acc")
+                {
+                    acc += data[row].Line.Split(' ')[1].Contains("+") ? 
+                        int.Parse(data[row].Line.Split('+')[1]) : 
+                        int.Parse(data[row].Line.Split(' ')[1]);
+                    row++;
                 }
             }
 
             return acc;
         }
 
-        public string Day8Prob2(string data)
+        public string Day8Prob2(Instruction[] data)
         {
             return "test";
         }
@@ -92,5 +85,6 @@ namespace AdventOfCode.Days
     public class Instruction {
         public string Line { get; set; }
         public int RowId { get; set; }
+        public bool Used { get; set; }
     }
 }
