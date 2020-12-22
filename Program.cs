@@ -12,8 +12,7 @@ namespace AdventOfCode
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            //new Seven().Run();
-            new Eight().Run();
+            new Nine().Run();
 
             stopwatch.Stop();
             Console.WriteLine(stopwatch.Elapsed);
